@@ -10,13 +10,17 @@
 	}
 
 	// Generamos nuestro array de errores interno
-	$errorsInLogin = [];
+	
+    	$errorsInLogin = [];
 
 	// Persistimos el email
+
+
 	$email = '';
 
 	if ($_POST) {
 		// Persistimos el email con lo vino por $_POST
+
 		$email = trim($_POST['email']);
 
 		// La función loginValidate() nos retorna el array de errores que almacenamos en esta variable
@@ -101,5 +105,6 @@
 			</div>
 		</div>
 	</div>
-	<!-- //Register-Form -->
+
+
 <?php require_once 'partials/footer.php'; ?>
