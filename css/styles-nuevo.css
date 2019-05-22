@@ -1,0 +1,126 @@
+@import url('normalize.css');
+
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font-family: helvetica;
+}
+
+.navbar {
+    background-color: #F0C43D;
+}
+
+.ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.li {
+    display: inline-block;
+ font-size: 20px;
+ color: black;
+}
+
+.a {
+    display: inline-block;
+    color: black;
+    padding: 12px 25px;
+    text-decoration: none;
+}
+
+.nav-link{
+  color: black;
+}
+
+.card-body {
+    background-color: #F0C43D;
+    color: white;
+}
+
+
+div#body{
+ margin: 40px auto;
+ width: 600px;
+ min-height: 50px;
+ background-color: white;
+ overflow: hidden;
+}
+
+
+div.abajo{
+ width: 600px;
+ min-height: 50px;
+
+}
+
+div.título{
+ width: 600px;
+ height: 40px;
+ background-color: #B8AC89;
+ overflow: hidden;
+}
+
+p.título{
+ margin: 13px;
+ color: white;
+}
+
+div.info{
+ width: 600px;
+ height: 0px;
+ background-color: #B8AC89;
+ overflow: hidden;
+ -webkit-transition: height 0.2s;
+}
+
+p.info{
+ margin: 20px;
+ text-align: center;
+ color: white;
+}
+
+div.abajo:hover div.info{
+ height: 140px;
+}
+
+.col-2 {
+    color: white;
+    text-align: left;
+
+}
+
+.titulo-del-logo {
+    font-family: 'Rancho';
+    text-align: left;
+}
+
+.letra-about {
+    color: black;
+    font-family: 'Rancho';
+    text-align: center;
+    font-size: 26px;
+}
+
+.login {
+  display: flex;
+  justify-content: space-around;
+}
+
+.carousel-caption {
+  color: black;
+  margin-bottom: 300px;
+  text-align: justify;
+}
+
+.textito {
+  font-family: "Baloo Bhai";
+  
+}
+
+
+
+Entrada de mensaje
+
+Enviar mensaje a Ezequiel, Gla, Dani Buxó
