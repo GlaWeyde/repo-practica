@@ -10,7 +10,7 @@
 	}
 
 	// Generamos nuestro array de errores interno
-	
+
     	$errorsInLogin = [];
 
 	// Persistimos el email
@@ -77,7 +77,7 @@
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
-								<label><b>Password:</b></label>
+								<label><b>Contraseña:</b></label>
 								<input
 									type="password"
 									name="password"

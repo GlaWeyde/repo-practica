@@ -39,6 +39,7 @@
 
 		$errorsInRegister = registerValidate();
 
+
 		// Si no hay errores en el registro
 		// Cuando no hay errores guardo la imagen y los datos
 		// if ( count($errorsInRegister) == 0 ) {
@@ -63,24 +64,12 @@
 
 	require_once 'partials/navbar.php';
 ?>
+<br>
 
-	<!-- Register-Form -->
-	<div class="container" style="margin-top:30px; margin-bottom: 30px;">
-		<div class="row justify-content-center">
-			<div class="col-md-10">
-				<?php if ( count($errorsInRegister) > 0 ): ?>
-					<div class="alert alert-danger">
-						<ul>
-							<?php foreach ($errorsInRegister as $oneError): ?>
-								<li> <?= $oneError; ?> </li>
-							<?php endforeach; ?>
-						</ul>
-					</div>
-				<?php endif; ?>
+<div class="container">
 
 
-				<h2>Formulario de registro</h2>
-
+			<h2>Formulario de registro</h2>
 				<form method="post" enctype="multipart/form-data">
 					<div class="row">
 						<div class="col-md-6">
@@ -113,11 +102,13 @@
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
-								<label><b>Password:</b></label>
+								<label><b>Contraseña:</b></label>
 								<input
 									type="password"
 									name="password"
-									class="form-control <?= isset($errorsInRegister['password']) ? 'is-invalid' : null ?>
+									class="form-control <?= isset($errorsInRegister['password']) ? 'is-invalid' : null ?>"
+								>
+
 
 
 								<div class="invalid-feedback">
@@ -127,7 +118,7 @@
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
-								<label><b>Repetir Password:</b></label>
+								<label><b>Repetir contraseña:</b></label>
 								<input
 									type="password"
 									name="rePassword"
@@ -169,7 +160,7 @@
 									 	name="avatar"
 										class="custom-file-input <?= isset($errorsInRegister['avatar']) ? 'is-invalid' : null; ?>"
 									>
-									<label class="custom-file-label">Choose file...</label>
+									<label class="custom-file-label">Elige una foto</label>
 									<div class="invalid-feedback">
 	          				<?= isset($errorsInRegister['avatar']) ? $errorsInRegister['avatar'] : null; ?>
 	        				</div>
@@ -184,6 +175,7 @@
 			</div>
 		</div>
 	</div>
+</div>
 	<!-- //Register-Form -->
 
 <?php require_once 'partials/footer.php'; ?>

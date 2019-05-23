@@ -19,7 +19,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Rancho" rel="stylesheet">
     <style>@import url('https://fonts.googleapis.com/css?family=Rancho');</style>
-    <link rel="stylesheet" href="styles-nuevo.css">
+    <link rel="stylesheet" href="css/styles-nuevo.css">
     <title>Acerca de Nosotros</title>
   </head>
 

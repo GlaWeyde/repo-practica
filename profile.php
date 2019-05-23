@@ -20,10 +20,10 @@
 		<div class="row">
 			<div class="col-md-4">
 				<br>
-				<h2>Hi <?= $theUser['name']; ?></h2>
+				<h2>Hola <?= $theUser['name']; ?></h2>
 				<img src="data/avatars/<?= $theUser['avatar']; ?>" alt="imagen usuario">
 				<br><br>
-				<a href="#" class="btn btn-info"><?= $theUser['email']; ?></a>
+
 			</div>
 		</div>
 	</div>

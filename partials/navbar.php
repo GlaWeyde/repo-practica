@@ -1,4 +1,3 @@
-<?php require_once 'partials/navbar.php'; ?>
 
 <nav class="navbar navbar-expand-lg">
 	<img src="images/logo.jpg" alt="logotipo" class="logo" width="60px" height="80px">

@@ -14,7 +14,7 @@
 		// Busco al usuario por el email que tengo almacenado en la cookie
 		$theUser = getUserByEmail($_COOKIE['userLoged']);
 
-		// Guardo en sesión al usuario que bisqué anteiormente
+		// Guardo en sesión al usuario que busqué anteriormente
 		$_SESSION['userLoged'] = $theUser;
 	}
 
@@ -32,11 +32,15 @@
 		$email = trim($_POST['email']);
 		$password = trim($_POST['password']);
 		$rePassword = trim($_POST['rePassword']);
+		$country = $_POST ['country'];
 		$avatar = $_FILES['avatar'];
 
 		// Si está vació el campo: $name
 		if ( empty($name) ) {
 			$errors['name'] = 'El campo nombre no puede estar vacío';
+		}
+		elseif ( !preg_match('/^[a-zA-Z -]+$/ ', $name) ) {
+			$errors ['name'] = 'El campo nombre no puede contener numeros';
 		}
 
 		// Si está vació el campo: $email
@@ -51,14 +55,10 @@
 		// Si está vació el campo: $password
 		if ( empty($password) ) {
 			$errors['password'] = 'El campo contraseña es obligatorio';
-		}
-
-		elseif (strlen ($password) < 5) {
-			$errores['password'] = "La contraseña debe tener al menos 5 carateres";
-		}
-
-		elseif (strpos ($password, "DH") == false) {
-			$errores ['password'] = "La contraseña debe contener las letras DH";
+		} elseif (strlen ($password) < 5) {
+			$errors['password'] = "La contraseña debe tener al menos 5 carateres";
+		} elseif ( !preg_match("/DH/", $password) ) {
+			$errors['password'] = "La contraseña debe contener las letras DH";
 		}
 
 		// Si está vació el campo: $rePassword
@@ -67,6 +67,10 @@
 		} elseif ($password != $rePassword) { // Si el valor de los campos $password y $rePassword son distintos
 			$errors['password'] = 'Las contraseñas no coinciden';
 			$errors['rePassword'] = 'Las contraseñas no coinciden';
+		}
+
+		if ( empty ($country)) {
+			$errors ['country'] = 'Eligí un país';
 		}
 
 
