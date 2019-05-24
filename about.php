@@ -8,6 +8,7 @@
   	<header>
 
 			<?php require_once 'partials/navbar.php'; ?>
+			
   <!--  <div class="container-fluid">
       <header class="row main-header align-items-center">
         logo: buscar imagen para logo -->

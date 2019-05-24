@@ -1,4 +1,3 @@
-
 <nav class="navbar navbar-expand-lg">
 	<img src="images/logo.jpg" alt="logotipo" class="logo" width="60px" height="80px">
 		<h1 style="margin:20px" class="titulo-del-logo">Dandelion</h1>
@@ -18,6 +17,7 @@
 								<li class="nav-item"><a class="nav-link" href="register.php">Registrarse</a></li>
 								<li class="nav-item"><a class="nav-link" href="login.php">Iniciar Sesion</a></li>
 							<?php else: ?>
+
 								<li class="nav-item dropdown">
 									<a class="nav-link dropdown-toggle" href="#" id="dropNavBar" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 										<img src="data/avatars/<?= $_SESSION['userLoged']['avatar']; ?>" width="40" style="border-radius: 50%; background-color: #ffffff; padding: 5px;">
