@@ -1,5 +1,5 @@
 <?php
-	require_once 'register-login-controller.php';
+require_once 'AutoLoad.php';
 
 	$pageTitle = 'Home';
 	require_once 'partials/head.php';
@@ -8,7 +8,7 @@
   	<header>
 
 			<?php require_once 'partials/navbar.php'; ?>
-			
+
   <!--  <div class="container-fluid">
       <header class="row main-header align-items-center">
         logo: buscar imagen para logo -->

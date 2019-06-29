@@ -4,9 +4,9 @@
 	session_start();
 
 	// Definimos las constantes que necesitamos en nuestro proyecto, de esta manera puedo usar las mismas dentro de las funciones sin tener que usar una variable global o pasarla por parámetro
-	define('ALLOWED_IMAGE_FORMATS', ['jpg', 'jpeg', 'png', 'gif']);
-	define('IMAGE_PATH', dirname(__FILE__) . '/data/avatars/');
-	define('USERS_JSON_PATH', dirname(__FILE__) . '/data/users.json');
+	//define('ALLOWED_IMAGE_FORMATS', ['jpg', 'jpeg', 'png', 'gif']);
+	//define('IMAGE_PATH', dirname(__FILE__) . '/data/avatars/');
+	//define('USERS_JSON_PATH', dirname(__FILE__) . '/data/users.json');
 
 
 	// Si está la cookie almacenada y si NO está logueda la persona:
@@ -94,25 +94,25 @@
 
 	// Función para guardar la imagen
 
-	function saveImage() {
+	//function saveImage() {
 		// Obtengo la extensión del archivo
-		$ext = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION);
+		//$ext = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION);
 
 		// Obtengo el archivo temporal
-		$tempFile = $_FILES['avatar']['tmp_name'];
+		//$tempFile = $_FILES['avatar']['tmp_name'];
 
 		// Armo el nombre de la imagen
-		$finalName = uniqid('img_') . '.' . $ext;
+		//$finalName = uniqid('img_') . '.' . $ext;
 
 		// Destino final (NO OLVIDAR DAR LOS PERMISOS A LA CARPETA EN NUESTRO D.D.)
-		$finalPath = IMAGE_PATH . $finalName;
+		//$finalPath = IMAGE_PATH . $finalName;
 
 		// Guardamos la imagen en nuestra carpeta
-		move_uploaded_file($tempFile, $finalPath);
+		//move_uploaded_file($tempFile, $finalPath);
 
 		// Retorno el nombre de la imagen para poder guardar el mismo en el JSON
-		return $finalName;
-	}
+		//return $finalName;
+	//}
 
 
 	// Función para generar un ID
@@ -193,8 +193,6 @@
 		header('location: profile.php');
 		exit; // Siempre, después de una redirección se recomienda hacer un exit.
 	}
-
-
 	// Función para saber si está logueado la/el usuaria/o
 	function isLogged() {
 		// El return devuelve true o false, según lo que retorne la función isset()
@@ -227,40 +225,40 @@
 	/*
 		No le pasamos parámetros pues usamos la variables super global $_POST
 	*/
-	function loginValidate() {
+	//function loginValidate() {
 		// Genero el array local de errores que retornaré al final
-		$errors = [];
+		//$errors = [];
 
 		// Trimeo los campos que recibo por $_POST
-		$email = trim($_POST['email']);
-		$password = trim($_POST['password']);
+	//	$email = trim($_POST['email']);
+	//	$password = trim($_POST['password']);
 
 		// Si está vacío el campo: $email
-		if ( empty($email) ) {
-			$errors['email'] = 'El campo email es obligatorio';
-		} elseif ( !filter_var($email, FILTER_VALIDATE_EMAIL) ) { // Si el campo $email no es un email válido
-			$errors['email'] = 'Introducí un formato de email válido';
-		} elseif ( !emailExist($email) ) { // Si no existe el email
+	//	if ( empty($email) ) {
+		//	$errors['email'] = 'El campo email es obligatorio';
+//		} elseif ( !filter_var($email, FILTER_VALIDATE_EMAIL) ) { // Si el campo $email no es un email válido
+//			$errors['email'] = 'Introducí un formato de email válido';
+//		} elseif ( !emailExist($email) ) { // Si no existe el email
 			// $errors['email'] = 'Ese correo no está registrado en nuestra base de datos';
-			$errors['email'] = 'Las credenciales no coinciden';
-		} else {
+//			$errors['email'] = 'Las credenciales no coinciden';
+	//	} else {
 			// Si pasamos las 3 validaciones anteriores, busco y  obtengo al usuario con el email que llegó por $_POST
-			$theUser = getUserByEmail($email);
+		//	$theUser = getUserByEmail($email);
 
 			// Si el password que recibí por $_POST NO coincide con el password hasheado que está guardado en el usuario
-			if ( !password_verify($password, $theUser['password']) ) {
-				$errors['password'] = 'Las credenciales no coinciden';
-			}
-		}
+		//	if ( !password_verify($password, $theUser['password']) ) {
+		//		$errors['password'] = 'Las credenciales no coinciden';
+		//	}
+	//	}
 
 		// Si está vacío el campo: $password
-		if ( empty($password) ) {
-			$errors['password'] = 'El campo password es obligatorio';
-		}
+	//	if ( empty($password) ) {
+	//		$errors['password'] = 'El campo password es obligatorio';
+		//}
 
 		// Retorno el array de errores con los mensajes de error
-		return $errors;
-	}
+//		return $errors;
+	//}
 
 
 	// Función para traer a 1 usuario por email

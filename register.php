@@ -1,88 +1,103 @@
 <?php
-	require_once 'register-login-controller.php';
+require_once 'AutoLoad.php';
 
 
-	if ( isLogged() ) {
-		header('location: profile.php');
-		exit;
+
+//Si la persona esta logueada la redirijo al profile
+
+	if ($Auth->isLogged() ) {
+	header('location: profile.php');
+	exit;
 	}
 
-	$pageTitle = 'Register';
-	require_once 'partials/head.php';
+	$registerValidator = new RegisterValidator;
 
-	$countries = [
-		'ar' => 'Argentina',
-		'bo' => 'Bolivia',
-		'br' => 'Brasil',
-		'co' => 'Colombia',
-		'cl' => 'Chile',
-		'ec' => 'Ecuador',
-		'pa' => 'Paraguay',
-		'pe' => 'Perú',
-		'uy' => 'Uruguay',
-		've' => 'Venezuela',
-	];
-
-	$errorsInRegister = [];
+	//	$errorsInRegister = [];
 
 	// Variables para persitir
-	$name = '';
-	$email = '';
-	$countryFromPost = '';
+//	$name = '';
+	//$email = '';
+	//$countryFromPost = '';
 
 	if ($_POST) {
 
-		$name = trim($_POST['name']);
-		$email = trim($_POST['email']);
-		$countryFromPost = $_POST['country'];
-
-
-		$errorsInRegister = registerValidate();
-
+		if ($DB->emailExist($_POST['email'])) {
+			$registerValidator->setError ('email' , 'Ese correo ya se encuentra registrado');
+		}
 
 		// Si no hay errores en el registro
 		// Cuando no hay errores guardo la imagen y los datos
 		// if ( count($errorsInRegister) == 0 ) {
-		if ( !$errorsInRegister ) {
+		if ( $registerValidator->isValid() ) {
 
-			// Guardo la imagen y obtengo el nombre aleatorio creado
-			$imgName = saveImage();
+// Guardo la imagen y obtengo el nombre aleatorio creado
+		SaveImage::uploadImage ($_FILES['avatar']);
+	 }
 
+//instancio al usuario
+	$user = new User ($_POST['name'], $_POST ['email'], $_POST ['country'], SaveImage::$avatarName);
+	$user->setId ($DB->generateID());
+	$user->setPassword($_POST['password']);
 
-			$_POST['avatar'] = $imgName;
+//$_POST['avatar'] = SaveImage::$avatarName;
 
-			// Guardo al usuario en el archivo JSON, y me devuelve al usuario que guardó en array
-			$theUser = saveUser();
+// Guardo al usuario en el archivo JSON, y me devuelve al usuario que guardó en array
+	$DB->saveUser($user);
 
-			// Al momento en que se registar vamos a mantener la sesión abierta
-			setcookie('userLoged', $theUser['email'], time() + 3000);
+// Al momento en que se registar vamos a mantener la sesión abierta
+	setcookie('userLogedEmail', $user->getEmail(), time() + 3000);
 
-			// Logueo al usuario
-			login($theUser);
-		}
+// Logueo al usuario
+	$Auth->login($theUser);
 	}
+
+		$countries = [
+			'ar' => 'Argentina',
+			'bo' => 'Bolivia',
+			'br' => 'Brasil',
+			'co' => 'Colombia',
+			'cl' => 'Chile',
+			'ec' => 'Ecuador',
+			'pa' => 'Paraguay',
+			'pe' => 'Perú',
+			'uy' => 'Uruguay',
+			've' => 'Venezuela',
+		];
+
+	$pageTitle = 'Register';
+	require_once 'partials/head.php';
 
 	require_once 'partials/navbar.php';
 ?>
 <br>
 
-<div class="container">
+<div class= "container" style= "margin-top:30px; margin-bottom:30px;">
+	<div class= "row justify-content-center">
+		<div class="col-md-10">
+			<?php if ($_POST && $registerValidator->isValid() == false) : ?>
+				<div class="alert alert-danger">
+					<ul>
+						<?php foreach ($registerValidator->getAllErrors() as $oneError): ?>
+							<li><?php echo $oneError; ?></li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+		<?php endif; ?>
 
-
-			<h2>Formulario de registro</h2>
-				<form method="post" enctype="multipart/form-data">
-					<div class="row">
-						<div class="col-md-6">
-							<div class="form-group">
-								<label><b>Nombre completo:</b></label>
-								<input
-									type="text"
-									name="name"
-									class="form-control <?= isset($errorsInRegister['name']) ? 'is-invalid' : null ?>"
-									value="<?= $name; ?>"
+	<h2>Formulario de registro</h2>
+			<form method="post" enctype="multipart/form-data">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label><b>Nombre completo:</b></label>
+							<input
+								type="text"
+								name="name"
+								class="form-control <?= $registerValidator->hasError('name') ? 'is-invalid' : null ?>"
+								value="<?= $registerValidator->getName(); ?>"
 								>
 								<div class="invalid-feedback">
-          				<?= isset($errorsInRegister['name']) ? $errorsInRegister['name'] : null; ?>
+          				<?= $registerValidator->hasError('name') ? $registerValidator->getError('name') : null ?>
         				</div>
 							</div>
 						</div>
@@ -92,11 +107,11 @@
 								<input
 									type="text"
 									name="email"
-									class="form-control <?= isset($errorsInRegister['email']) ? 'is-invalid' : null ?>"
-									value="<?= $email; ?>"
+									class="form-control <?= $registerValidator->hasError('email') ? 'is-invalid' : null ?>"
+									value="<?= $registerValidator->getEmail(); ?>"
 								>
 								<div class="invalid-feedback">
-          				<?= isset($errorsInRegister['email']) ? $errorsInRegister['email'] : null; ?>
+          				<?= $registerValidator->hasError('email') ? $registerValidator->getError('email') : null; ?>
         				</div>
 							</div>
 						</div>
@@ -106,13 +121,10 @@
 								<input
 									type="password"
 									name="password"
-									class="form-control <?= isset($errorsInRegister['password']) ? 'is-invalid' : null ?>"
-								>
-
-
+									class="form-control <?= $registerValidator->hasError('password') ? 'is-invalid' : null ?>">
 
 								<div class="invalid-feedback">
-          				<?= isset($errorsInRegister['password']) ? $errorsInRegister['password'] : null; ?>
+          				<?= $registerValidator->hasError('password') ? $registerValidator->getError('password') : null; ?>
         				</div>
 							</div>
 						</div>
@@ -122,10 +134,10 @@
 								<input
 									type="password"
 									name="rePassword"
-									class="form-control <?= isset($errorsInRegister['rePassword']) ? 'is-invalid' : null; ?>"
+									class="form-control <?= $registerValidator->hasError('rePassword') ? 'is-invalid' : null; ?>"
 								>
 								<div class="invalid-feedback">
-          				<?= isset($errorsInRegister['rePassword']) ? $errorsInRegister['rePassword'] : null; ?>
+          				<?= $registerValidator->hasError('rePassword') ? $registerValidator->getError('rePassword') : null; ?>
         				</div>
 							</div>
 						</div>
@@ -134,20 +146,20 @@
 								<label><b>País de nacimiento:</b></label>
 								<select
 									name="country"
-									class="form-control <?= isset($errorsInRegister['country']) ? 'is-invalid' : null; ?>"
+									class="form-control <?= $registerValidator->hasError('country') ? 'is-invalid' : null; ?>"
 								>
 									<option value="">Elegí un país</option>
 									<?php foreach ($countries as $code => $country): ?>
 										<option
 											value="<?= $code ?>"
-											<?= $code == $countryFromPost ? 'selected' : null; ?>
+											<?= $code == $registerValidator->getCountry() ? 'selected' : null; ?>
 										>
 											<?= $country ?>
 										</option>
 									<?php endforeach; ?>
 								</select>
 								<div class="invalid-feedback">
-          				<?= isset($errorsInRegister['country']) ? $errorsInRegister['country'] : null; ?>
+          				<?= $registerValidator->hasError('country') ? $registerValidator->getError('country') : null; ?>
         				</div>
 							</div>
 						</div>
@@ -158,11 +170,11 @@
 									<input
 										type="file"
 									 	name="avatar"
-										class="custom-file-input <?= isset($errorsInRegister['avatar']) ? 'is-invalid' : null; ?>"
+										class="custom-file-input <?= $registerValidator->hasError('avatar') ? 'is-invalid' : null; ?>"
 									>
 									<label class="custom-file-label">Elige una foto</label>
 									<div class="invalid-feedback">
-	          				<?= isset($errorsInRegister['avatar']) ? $errorsInRegister['avatar'] : null; ?>
+	          				<?= $registerValidator->hasError('avatar') ? $registerValidator->getError('avatar') : null; ?>
 	        				</div>
 								</div>
 							</div>
@@ -177,5 +189,4 @@
 	</div>
 </div>
 	<!-- //Register-Form -->
-
 <?php require_once 'partials/footer.php'; ?>

@@ -1,44 +1,32 @@
 <?php
-	// Incluimos el controlador del registro-login
-	// De esta manera tengo el scope a la funciones que necesito
-	require_once 'register-login-controller.php';
+	require_once 'AutoLoad.php';
 
-	// Si está logueda la persona la redirijo al profile
-	if ( isLogged() ) {
+// Si está logueda la persona la redirijo al profile
+	if ($Auth->isLogged() ) {
 		header('location: profile.php');
 		exit;
 	}
 
-	// Generamos nuestro array de errores interno
+	$loginValidator = new LoginValidator;
 
-    	$errorsInLogin = [];
+	if($_POST) {
 
-	// Persistimos el email
+		$user = $DB->getUserByEmail($_POST['email']);
 
-
-	$email = '';
-
-	if ($_POST) {
-		// Persistimos el email con lo vino por $_POST
-
-		$email = trim($_POST['email']);
-
-		// La función loginValidate() nos retorna el array de errores que almacenamos en esta variable
-		$errorsInLogin = loginValidate();
-
-		if ( !$errorsInLogin ) {
-			// Traemos al usuario que vamos a loguear
-			$userToLogin = getUserByEmail($email);
-
-			// Preguntamos si quiere ser recordado
-			if ( isset($_POST['rememberUser']) ) {
-				setcookie('userLoged', $email, time() + 3000);
-			}
-
-			// Logeamos al usuario
-			login($userToLogin);
+		if ( !$user ) {
+			$loginValidator->setError('email', 'No hay usuario registrado con ese correo');
+		} elseif( !password_verify($_POST['password'], $user->getPassword()) ) {
+			$loginValidator->setError('password', 'Error de credenciales');
 		}
-	}
+			if ( $loginValidator->isValid() ) {
+// Preguntamos si quiere ser recordado
+			if ( isset($_POST['rememberUser']) ) {
+					setcookie('userLogedEmail', $user->getEmail(), time() + 3000);
+				}
+					$Auth->login($user);
+				}
+
+			}
 
 	$pageTitle = 'Login';
 	require_once 'partials/head.php';
@@ -46,19 +34,12 @@
 
 <?php require_once 'partials/navbar.php'; ?>
 
+
 	<!-- Register-Form -->
 	<div class="container" style="margin-top:30px; margin-bottom: 30px;">
 		<div class="row justify-content-center">
 			<div class="col-md-10">
-				<?php if (count($errorsInLogin) > 0): ?>
-					<div class="alert alert-danger">
-						<ul>
-							<?php foreach ($errorsInLogin as $oneError): ?>
-								<li> <?= $oneError; ?> </li>
-							<?php endforeach; ?>
-						</ul>
-					</div>
-				<?php endif; ?>
+
 
 				<h2>Formulario de Login</h2>
 
@@ -71,7 +52,7 @@
 									type="text"
 									name="email"
 									class="form-control"
-									value="<?= $email; ?>"
+									value="<?= ''; ?>"
 								>
 							</div>
 						</div>
@@ -105,6 +86,9 @@
 			</div>
 		</div>
 	</div>
+?>
+
+
 
 
 <?php require_once 'partials/footer.php'; ?>

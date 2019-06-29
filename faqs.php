@@ -1,5 +1,6 @@
 <?php
-	require_once 'register-login-controller.php';
+require_once 'AutoLoad.php';
+
 
 	$pageTitle = 'Home';
 	require_once 'partials/head.php';
