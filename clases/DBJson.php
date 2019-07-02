@@ -39,15 +39,52 @@ class DbJson extends DB
 		return $allUsers;
   }
 
+	$servername = "mysql:host=localhost;db_name=myecommerce;port=3306";
+	$username = "root";
+	$password = "root";
+	//creo la conexion con la base de datos
+	try {
+	    $conex = new PDO($servername, $username, $password);
+	} catch (PDOException $e) {
+	    echo $e; exit;
+	}
+	$query2 = $conex->query('SELECT * FROM usuarios');
+	$resultado = $query2->fetchAll(PDO::FETCH_ASSOC);
+	var_dump($resultado);
+	exit;
+
   public function saveUser(User $oneUser){
  // Obtengo todos los usuarios
     $allUsers = $this->getAllUsers();
 
+		// Trimeamos los valores que vinieron por $_POST
+		$_POST['name'] = trim($_POST['name']);
+		$_POST['email'] = trim($_POST['email']);
+		// Hasheo el password del usuario
+		$_POST['password'] = password_hash(trim($_POST['password']), PASSWORD_DEFAULT);
+		// Genero el ID y lo guardo en una posición de $_POST llamada "id"
+		$_POST['id'] = generateID();
+		// Elimino de $_POST la posición "rePassword" ya que no me interesa guardar este dato en mi DB (Data Base)
+		unset($_POST['rePassword']);
+		$finalImg = saveImage();
+		$nombre = $_POST['name'];
+		$email= $_POST['email'];
+		$password = $_POST ['password'];
+		// $sql = "INSERT INTO usuarios ('nombre', 'e-mail', 'contraseña', 'avatar') VALUES ($nombre, $email, $password, $finalImg)";
+	$sql = "INSERT INTO usuarios VALUES (default, '$nombre', null, '$email', '$password', '$finalImg')";
+		$query = $conex->prepare($sql);
+		$query->execute();
+		var_dump($query);
+		exit;
+		// Retorno al usuario que acabo de guardar para poder tenerlo listo y loguearlo
+		return $finalUser;
+
+
     // En la última posición del array de usuarios, inserto al usuario nuevo
-    $allUsers[] = $oneUser->getDataInArray();
+    //$allUsers[] = $oneUser->getDataInArray();
 
     // Guardo todos los usuarios de vuelta en el JSON
-    file_put_contents(USERS_JSON_PATH . $this->dbName, json_encode($allUsers));
+  //  file_put_contents(USERS_JSON_PATH . $this->dbName, json_encode($allUsers));
 
     // Retorno al usuario que acabo de guardar para poder tenerlo listo y loguearlo
     //return $this->finalUser;
